@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VectorGuard — MongoDB Atlas Vector Compliance Radar ($40,000 Hackathon)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            mongo: '#00ed64',
+            darkslate: '#0b101b',
+            card: '#131c2e',
+            cardinner: '#18243c',
+            border: '#243452',
+            accent: '#00684a',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-darkslate text-slate-300 font-sans min-h-screen antialiased flex flex-col">
+
+  <!-- Header -->
+  <header class="border-b border-border bg-[#0d1424]/90 backdrop-blur-md px-6 py-4 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-50">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-[#001e2b] border border-[#00ed64]/40 flex items-center justify-center text-mongo font-black text-xl shadow-lg shadow-[#00ed64]/10">
+        🍃
+      </div>
+      <div>
+        <div class="flex items-center space-x-2">
+          <h1 class="text-white font-bold text-base tracking-tight">VectorGuard</h1>
+          <span class="text-[10px] font-bold uppercase tracking-wider bg-mongo/10 text-mongo border border-mongo/30 px-2 py-0.5 rounded font-mono">
+            MongoDB Atlas Vector Search
+          </span>
+        </div>
+        <p class="text-xs text-slate-400 font-mono">Autonomous Legal Policy & Regulatory Drift Radar</p>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-3 text-xs">
+      <div class="hidden md:flex items-center space-x-2 bg-card px-3 py-1.5 rounded-lg border border-border">
+        <span class="w-2 h-2 rounded-full bg-mongo animate-pulse"></span>
+        <span class="text-slate-300 font-mono">Atlas k-NN Index Online</span>
+      </div>
+      <div class="bg-mongo/10 text-mongo border border-mongo/30 px-3 py-1.5 rounded-lg font-mono font-bold">
+        $40,000 MongoDB Hackathon
+      </div>
+      <a href="https://github.com/iamarifalam/vectorguard-compliance-radar" target="_blank" class="bg-mongo/20 hover:bg-mongo/30 text-white border border-mongo/40 px-3 py-1.5 rounded-lg font-mono transition">
+        GitHub Source ↗
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- Left Scenario Selector (5 cols) -->
+    <div class="lg:col-span-5 space-y-5">
+      <div class="bg-card border border-border rounded-xl p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-bold text-white uppercase tracking-wider font-mono">1. Select Contract Clause Set</h2>
+          <span class="text-[11px] text-mongo font-mono">Cosine Similarity</span>
+        </div>
+
+        <div class="space-y-2">
+          <button onclick="loadContract('compliant_dpa')" id="btn-comp" class="w-full text-left p-3 rounded-lg border border-mongo/40 bg-mongo/5 hover:bg-mongo/10 transition flex items-start justify-between">
+            <div>
+              <div class="text-white text-xs font-bold">Standard Enterprise DPA</div>
+              <div class="text-[11px] text-slate-400">GDPR Art 28 & SOC 2 compliant clauses</div>
+            </div>
+            <span class="text-[10px] font-mono bg-mongo/20 text-mongo px-2 py-0.5 rounded">BENCHMARK</span>
+          </button>
+
+          <button onclick="loadContract('predatory_vendor_trap')" id="btn-trap" class="w-full text-left p-3 rounded-lg border border-border bg-cardinner hover:border-rose-500/40 hover:bg-rose-500/5 transition flex items-start justify-between">
+            <div>
+              <div class="text-white text-xs font-bold">Predatory AI Vendor Contract</div>
+              <div class="text-[11px] text-slate-400">Data retention, breach waiver, negligence trap</div>
+            </div>
+            <span class="text-[10px] font-mono bg-rose-500/20 text-rose-400 px-2 py-0.5 rounded">HIGH RISK</span>
+          </button>
+        </div>
+
+        <!-- Contract Details -->
+        <div class="space-y-3 pt-2 text-xs">
+          <div>
+            <label class="block text-slate-400 font-mono mb-1">Contract Reference & Counterparty</label>
+            <input type="text" id="contract-title" class="w-full bg-cardinner border border-border rounded-lg p-2.5 text-white font-mono" readonly>
+          </div>
+
+          <div>
+            <label class="block text-slate-400 font-mono mb-1">Clauses Ingested for Vector Search</label>
+            <div id="clauses-preview" class="space-y-2 max-h-[220px] overflow-y-auto pr-1">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </div>
+
+        <button onclick="executeVectorAudit()" id="btn-audit" class="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-[#00ed64] to-[#00684a] text-[#001e2b] font-black text-sm tracking-wide shadow-lg shadow-mongo/20 flex items-center justify-center space-x-2 hover:opacity-90 transition">
+          <span id="btn-spinner" class="hidden animate-spin">🌀</span>
+          <span id="btn-label">Execute Atlas Vector Search Audit</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Audit Results (7 cols) -->
+    <div class="lg:col-span-7 space-y-5">
+      <div class="bg-card border border-border rounded-xl p-5 space-y-4 min-h-[580px] flex flex-col justify-between">
+
+        <div>
+          <!-- Results Header -->
+          <div class="flex items-center justify-between border-b border-border pb-4">
+            <div>
+              <span class="text-[11px] text-slate-400 font-mono uppercase tracking-wider">Atlas Vector Audit Decision</span>
+              <h3 id="result-status" class="text-white font-bold text-base mt-0.5">Ready for Search</h3>
+            </div>
+            <div class="text-right">
+              <span class="text-[11px] text-slate-400 font-mono">Compliance Score</span>
+              <div id="score-val" class="text-2xl font-black font-mono text-slate-500">--/100</div>
+            </div>
+          </div>
+
+          <!-- Atlas Vector Search Performance Bar -->
+          <div id="vector-stats-bar" class="mt-4 p-3 rounded-lg border border-border bg-cardinner text-xs font-mono grid grid-cols-3 gap-2 text-center hidden">
+            <div>
+              <span class="text-slate-500 block text-[10px]">Vector Latency</span>
+              <span class="text-mongo font-bold" id="stat-latency">-- ms</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block text-[10px]">Dimensions</span>
+              <span class="text-slate-300 font-bold">64-dim (Cosine)</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block text-[10px]">Index Engine</span>
+              <span class="text-sky-400 font-bold">MongoDB Atlas</span>
+            </div>
+          </div>
+
+          <!-- Violations Stream -->
+          <div class="mt-4 space-y-3">
+            <h4 class="text-xs font-bold text-slate-400 uppercase font-mono tracking-wider">Detected Regulatory Drift & Remediation Clauses</h4>
+            <div id="violations-container" class="space-y-3 max-h-[350px] overflow-y-auto pr-1">
+              <div class="p-8 text-center text-slate-500 font-mono text-xs">
+                Select a contract and click "Execute Atlas Vector Search Audit" to perform k-NN regulatory matching.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-border pt-3 mt-4 text-[11px] font-mono text-slate-500 flex justify-between">
+          <span>Target: MongoDB AI Innovators Challenge</span>
+          <span>Lead: Arif Alam (iamarifalam@gmail.com)</span>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    let sampleContracts = [];
+    let activeContract = null;
+
+    async function init() {
+      try {
+        const resp = await fetch('/api/sample/contracts');
+        sampleContracts = await resp.json();
+        if (sampleContracts.length > 0) {
+          loadContract('compliant_dpa');
+        }
+      } catch (e) {
+        console.error('Failed to load sample contracts', e);
+      }
+    }
+
+    function loadContract(id) {
+      activeContract = sampleContracts.find(c => c.id === id);
+      if (!activeContract) return;
+
+      document.getElementById('contract-title').value = `${activeContract.contract_id} — ${activeContract.counterparty}`;
+
+      const preview = document.getElementById('clauses-preview');
+      preview.innerHTML = activeContract.clauses.map(c => `
+        <div class="p-2.5 rounded bg-card border border-border text-[11px]">
+          <div class="flex items-center justify-between text-slate-400 font-mono">
+            <strong>${c.section_title}</strong>
+            <span class="text-[9px] uppercase px-1.5 py-0.2 rounded bg-border text-slate-300">${c.category}</span>
+          </div>
+          <p class="text-slate-300 mt-1 italic">"${c.text}"</p>
+        </div>
+      `).join('');
+
+      document.getElementById('btn-comp').className = id === 'compliant_dpa'
+        ? 'w-full text-left p-3 rounded-lg border border-mongo/50 bg-mongo/10 transition flex items-start justify-between'
+        : 'w-full text-left p-3 rounded-lg border border-border bg-cardinner transition flex items-start justify-between';
+
+      document.getElementById('btn-trap').className = id === 'predatory_vendor_trap'
+        ? 'w-full text-left p-3 rounded-lg border border-rose-500/50 bg-rose-500/10 transition flex items-start justify-between'
+        : 'w-full text-left p-3 rounded-lg border border-border bg-cardinner transition flex items-start justify-between';
+    }
+
+    async function executeVectorAudit() {
+      if (!activeContract) return;
+
+      const btn = document.getElementById('btn-audit');
+      const spinner = document.getElementById('btn-spinner');
+      const label = document.getElementById('btn-label');
+
+      btn.disabled = true;
+      spinner.classList.remove('hidden');
+      label.innerText = 'Searching MongoDB Atlas Vector Index...';
+
+      try {
+        const resp = await fetch('/api/audit/contract', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(activeContract)
+        });
+        const result = await resp.json();
+        renderAudit(result);
+      } catch (err) {
+        alert('Audit failed: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        spinner.classList.add('hidden');
+        label.innerText = 'Execute Atlas Vector Search Audit';
+      }
+    }
+
+    function renderAudit(result) {
+      const statusElem = document.getElementById('result-status');
+      const scoreElem = document.getElementById('score-val');
+      const statsBar = document.getElementById('vector-stats-bar');
+
+      statsBar.classList.remove('hidden');
+      document.getElementById('stat-latency').innerText = `${result.atlas_vector_metrics.search_latency_ms} ms`;
+
+      scoreElem.innerText = `${result.compliance_score}/100`;
+
+      if (result.status === 'COMPLIANT') {
+        statusElem.innerText = 'COMPLIANT — Approved for Execution';
+        statusElem.className = 'text-mongo font-bold text-base mt-0.5';
+        scoreElem.className = 'text-2xl font-black font-mono text-mongo';
+      } else if (result.status === 'CONDITIONAL_APPROVAL') {
+        statusElem.innerText = 'CONDITIONAL APPROVAL — Minor Drift';
+        statusElem.className = 'text-amber-400 font-bold text-base mt-0.5';
+        scoreElem.className = 'text-2xl font-black font-mono text-amber-400';
+      } else {
+        statusElem.innerText = 'REJECTED — Critical Regulatory Breach';
+        statusElem.className = 'text-rose-400 font-bold text-base mt-0.5';
+        scoreElem.className = 'text-2xl font-black font-mono text-rose-400';
+      }
+
+      const container = document.getElementById('violations-container');
+      if (result.violations.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 rounded-lg border border-mongo/30 bg-mongo/5 text-center text-xs text-mongo font-mono">
+            ✓ Zero regulatory violations or indemnity traps detected. All clauses match golden regulatory standards via Atlas Vector Search.
+          </div>
+        `;
+      } else {
+        container.innerHTML = result.violations.map(v => `
+          <div class="p-3.5 rounded-lg border border-border bg-cardinner text-xs space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-white font-mono">${v.rule_breached}</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">${v.severity}</span>
+            </div>
+            <div class="text-slate-300 font-sans">${v.risk_narrative}</div>
+            <div class="p-2 rounded bg-darkslate border border-border text-[11px] font-mono space-y-1">
+              <div class="text-mongo font-bold">Suggested Remediation Language:</div>
+              <div class="text-slate-300">"${v.remediation_clause}"</div>
+            </div>
+            <div class="text-[10px] font-mono text-slate-500 flex justify-between">
+              <span>Matched Mandate: <strong>${v.matched_mandate}</strong></span>
+              <span>Atlas Cosine Sim: <strong>${v.similarity_score}</strong></span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
